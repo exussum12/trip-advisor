@@ -1,0 +1,37 @@
+{
+  "reviews" : [ {
+    "reviewReference" : "1118857965",
+    "listingReference" : null,
+    "externalListingReference" : null,
+    "isDeleted" : true,
+    "reviewDate" : "2012-04-04",
+    "visitDate" : null,
+    "title" : null,
+    "text" : null,
+    "reviewLanguage" : null,
+    "managementResponse" : null,
+    "responseLanguage" : null,
+    "rating" : 0,
+    "authorName" : null,
+    "authorLocation" : null,
+    "accountReference" : null,
+    "externalAccountReference" : null
+  }, {
+    "reviewReference" : "1118857963",
+    "listingReference" : "76648",
+    "externalListingReference" : "VRS1492",
+    "isDeleted" : false,
+    "reviewDate" : "2012-04-02",
+    "visitDate" : "2011-02",
+    "title" : "Great property",
+    "text" : "We loved staying at this property. Will return again",
+    "reviewLanguage" : "en",
+    "managementResponse" : "Thank you for saying nice things",
+    "responseLanguage" : "en",
+    "rating" : 5,
+    "authorName" : "Andrew M",
+    "authorLocation" : "London, United Kingdom",
+    "accountReference" : "1423",
+    "externalAccountReference" : "xy1d93c49"
+  } ]
+}

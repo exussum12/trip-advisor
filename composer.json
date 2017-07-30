@@ -1,0 +1,17 @@
+{
+    "name": "exussum12/TripAdvisor",
+    "description": "PHP implementation of review API",
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Scott Dutton",
+            "email": "scott@exussum.co.uk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"exussum12\\TripAdvisor\\": "src/"}
+    }
+}
