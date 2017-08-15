@@ -26,8 +26,8 @@ class Curl implements Client
             ]
         );
         curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->curlHandle, CURLOPT_VERBOSE, 1);
-        curl_setopt($this->curlHandle, CURLOPT_HEADER, 1);
-        var_dump(curl_exec($this->curlHandle));
+        //curl_setopt($this->curlHandle, CURLOPT_VERBOSE, 1);
+        //curl_setopt($this->curlHandle, CURLOPT_HEADER, 1);
+        return curl_exec($this->curlHandle);
     }
 }
