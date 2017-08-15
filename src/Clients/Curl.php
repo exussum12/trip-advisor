@@ -17,7 +17,7 @@ class Curl implements Client
     }
     public function getWithSignature($url, $signature)
     {
-        curl_setopt($this->curlHandle, CURLOPT_URL, static::URL);
+        curl_setopt($this->curlHandle, CURLOPT_URL, $url);
         curl_setopt(
             $this->curlHandle,
             CURLOPT_HTTPHEADER,
