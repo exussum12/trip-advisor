@@ -12,7 +12,10 @@ class Reviews
     private $clientCode;
     private $secret;
     private $client;
-    private $urlArgs = [];
+    private $urlArgs = [
+        'offset' => 0,
+        'limit' => 1000,
+    ];
     public function __construct($clientCode, $secret, Client $client)
     {
         $this->clientCode = $clientCode;
@@ -111,6 +114,11 @@ class Reviews
         );
     }
 
+    public function getSettings()
+    {
+        return $this->urlArgs;
+    }
+
     private function makeReviews($response)
     {
         $reviews = json_decode($response);
@@ -120,7 +128,8 @@ class Reviews
                 $out[] = new Review($review);
             }
         }
-        return $out;
+
+        return new ResultSet($this, $out);
     }
 
 }
