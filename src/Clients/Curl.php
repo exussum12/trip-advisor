@@ -6,15 +6,19 @@ use exussum12\TripAdvisor\Client;
 class Curl implements Client
 {
     private $curlHandle;
-    public function __construct()
+    public function __construct($curl = null)
     {
-        $this->curlHandle = curl_init();
+        if (is_null($curl)) {
+            $curl = curl_init();
+        }
+        $this->curlHandle = $curl;
         curl_setopt(
             $this->curlHandle,
             CURLOPT_USERAGENT,
             'Exussum Tripadvisor Client'
         );
     }
+
     public function getWithSignature($url, $signature)
     {
         curl_setopt($this->curlHandle, CURLOPT_URL, $url);
@@ -26,8 +30,15 @@ class Curl implements Client
             ]
         );
         curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, true);
-        //curl_setopt($this->curlHandle, CURLOPT_VERBOSE, 1);
-        //curl_setopt($this->curlHandle, CURLOPT_HEADER, 1);
+        $headers = [];
+        curl_setopt(
+            $this->curlHandle,
+            CURLOPT_HEADERFUNCTION,
+            function ($curl, $header) use ($headers) {
+                list($key, $value) = explode($header, ':', 2);
+            }
+        );
+
         return curl_exec($this->curlHandle);
     }
 }

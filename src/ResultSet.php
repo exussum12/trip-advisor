@@ -2,9 +2,10 @@
 
 namespace exussum12\TripAdvisor;
 
+use Countable;
 use Iterator;
 
-class ResultSet implements Iterator
+class ResultSet implements Iterator, Countable
 {
     protected $current = 0;
     protected $reviews;
@@ -38,18 +39,14 @@ class ResultSet implements Iterator
         }
 
         $settings = $this->reviews->getSettings();
-        if ($this->current % $settings['limit'] == 0 && $this->current > 0) {
+        $offset = $settings['offset'] ?: $settings['limit'];
+        if ($this->current % $offset == $this->current % $settings['limit'] && $this->current > 0) {
             $this->reviews->offset(
                 $settings['limit'] + $settings['offset']
             );
-            var_dump("set offset to " , ($settings['limit'] + $settings['offset']));
 
             $extraResults = $this->reviews->get();
-            $this->array = array_merge($this->array,$extraResults->get());
-            var_dump("Adding");
-            var_dump(count($this->array));
-            sleep(5);
-            var_dump(count($this->array));
+            $this->array = array_merge($this->array, $extraResults->getArray());
 
             return isset($this->array[$this->current]);
         }
@@ -62,8 +59,13 @@ class ResultSet implements Iterator
         $this->current = 0;
     }
 
-    public function get()
+    public function getArray()
     {
         return $this->array;
+    }
+
+    public function count()
+    {
+        return count($this->array);
     }
 }

@@ -5,10 +5,12 @@ namespace exussum12\TripAdvisor;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use exussum12\TripAdvisor\Clients\Curl;
 
 class Reviews
 {
     const URL = "https://rentals.tripadvisor.com/api/reviews/v1";
+
     private $clientCode;
     private $secret;
     private $client;
@@ -16,10 +18,16 @@ class Reviews
         'offset' => 0,
         'limit' => 1000,
     ];
-    public function __construct($clientCode, $secret, Client $client)
+
+    public function __construct($clientCode, $secret, Client $client = null)
     {
         $this->clientCode = $clientCode;
         $this->secret = $secret;
+
+        if (is_null($client)) {
+            $client = new Curl();
+        }
+
         $this->client = $client;
     }
 
@@ -60,11 +68,11 @@ class Reviews
         $this->urlArgs['externalListingReference'] = $reference;
 
         return $this;
-
     }
 
     public function offset($offset)
     {
+        $offset = max($offset, 0);
         $this->urlArgs['offset'] = $offset;
 
         return $this;
@@ -72,6 +80,9 @@ class Reviews
 
     public function limit($limit)
     {
+        $limit = min($limit, 1000);
+        $limit = max($limit, 1);
+
         $this->urlArgs['limit'] = $limit;
 
         return $this;
@@ -131,5 +142,4 @@ class Reviews
 
         return new ResultSet($this, $out);
     }
-
 }

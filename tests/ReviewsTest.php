@@ -23,37 +23,49 @@ class ReviewsTest extends TestCase
 
     public function testNoOptionsCase()
     {
+        $signature = '2e700c366abc98c6ae771226b80e7411030f3c97382e7abcff7c8670e4cde' .
+            'dd251886f45e1ce971c3de4206b7e999ec1cb18372ffbde6ea4e2f659fcf6bc73a5';
+        $time = '2017-01-01T07:04:03Z';
         $this->client->method('getWithSignature')
-            ->with(Reviews::URL, 'VRS-HMAC-SHA512 timestamp=2017-01-01T07:04:03Z, client=key, signature=94eee14544c1f4f50675b2ab2948ba71ac4c314185dd47c694853f2e9929889a35bc27a39c49fcc9782aeea40ec52ae4558851024d21557857a53096bfb23b81')
+            ->with(
+                Reviews::URL . '?offset=0&limit=1000',
+                'VRS-HMAC-SHA512 timestamp=' . $time . ', client=key, signature=' . $signature
+            )
             ->willReturn('[]');
 
-        $this->assertEquals([],$this->reviews->get('2017-01-01T07:04:03Z'));
+        $this->assertEquals([], $this->reviews->get($time)->getArray());
     }
 
     public function testOffsetLimit()
     {
+        $signature = 'c2dad1c1f5bbd1416fff7776200d43928032291a42137650896cf3a5cff18163c9f4825f16' .
+            '93725df45e1d763190551e78479977e5c746486863c86ced584e5e';
         $this->client->method('getWithSignature')
             ->with(
                 Reviews::URL . '?offset=1&limit=1',
-                'VRS-HMAC-SHA512 timestamp=2017-07-29T07:49:58Z, client=key, signature=c2dad1c1f5bbd1416fff7776200d43928032291a42137650896cf3a5cff18163c9f4825f1693725df45e1d763190551e78479977e5c746486863c86ced584e5e'
+                'VRS-HMAC-SHA512 timestamp=2017-07-29T07:49:58Z, client=key, signature=' . $signature
             )
             ->willReturn('[]');
         $reviews = $this->reviews->offset(1)->limit(1)->get('2017-07-29T07:49:58Z');
-        $this->assertEquals([],$reviews);
-
+        $this->assertEquals([], $reviews->getArray());
     }
 
     public function testOnlyOneAccountRefSent()
     {
+        $signature = 'ba23256699be8b6a1f3f244bb6b46ffc0a36bdf33494c3c789a6044b17b74b2021' .
+        '1e80b703bb46419fd5e6c2afbbe84002e43e6b89ce9af1c0998103c30ff467';
         $this->client->method('getWithSignature')
             ->with(
-                Reviews::URL . '?accountReference=2345',
-                'VRS-HMAC-SHA512 timestamp=2017-07-29T07:49:58Z, client=key, signature=d297b95b875cf9318f7b1efaa4744ee207d9d759c2061b310a830efbd42d4afb9bdca0eb56ef2c2fe388e24dd9d2eae35bd1dd2ac2f92c63408a8622df3c9f69'
+                Reviews::URL . '?offset=0&limit=1000&accountReference=2345',
+                'VRS-HMAC-SHA512 timestamp=2017-07-29T07:49:58Z, client=key, signature=' . $signature
             )
             ->willReturn('[]');
-        $reviews = $this->reviews->forExternalAccount('1234')->forAccount('2345')->get('2017-07-29T07:49:58Z');
-        $this->assertEquals([],$reviews);
+        $reviews = $this->reviews
+            ->forExternalAccount('1234')
+            ->forAccount('2345')
+            ->get('2017-07-29T07:49:58Z');
 
+        $this->assertEquals([], $reviews->getArray());
     }
 
     public function testResponseIsParsedCorrectly()
@@ -65,29 +77,50 @@ class ReviewsTest extends TestCase
             )
             ->willReturn(file_get_contents(__DIR__ . '/Fixtures/SampleResponse.json'));
         $reviews = $this->reviews->get();
-        $this->assertEquals(2,count($reviews));
+
+        $this->assertEquals(2, count($reviews));
     }
 
     public function testSingleReference()
     {
         $this->client->method('getWithSignature')
             ->with(
-                Reviews::URL . '?listingReference=2345',
+                Reviews::URL . '?offset=0&limit=1000&listingReference=2345',
                 $this->anything()
             )
             ->willReturn(file_get_contents(__DIR__ . '/Fixtures/SampleResponse.json'));
         $reviews = $this->reviews->forExternalReference('1234')->forListingReference("2345")->get();
-        $this->assertEquals(2,count($reviews));
+
+        $this->assertEquals(2, count($reviews));
     }
+
     public function testDate()
     {
         $this->client->method('getWithSignature')
             ->with(
-                Reviews::URL . '?startDate=2017-01-01',
+                Reviews::URL . '?offset=0&limit=1000&startDate=2017-01-01',
                 $this->anything()
             )
             ->willReturn(file_get_contents(__DIR__ . '/Fixtures/SampleResponse.json'));
         $reviews = $this->reviews->since(new DateTime('2017-01-01'))->get();
-        $this->assertEquals(2,count($reviews));
+
+        $this->assertEquals(2, count($reviews));
+    }
+
+    public function testGetSettingsBack()
+    {
+        $expected = [
+            'startDate' => '2017-01-01',
+            'offset' => 0,
+            'limit' => 1000,
+        ];
+        $this->reviews->since(new DateTime('2017-01-01'));
+
+        $this->assertEquals($expected, $this->reviews->getSettings());
+    }
+
+    public function testAutomaticallySelectCurl()
+    {
+        $this->assertInstanceOf(Reviews::class, new Reviews('key', 'secret'));
     }
 }

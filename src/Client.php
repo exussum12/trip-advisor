@@ -1,6 +1,6 @@
 <?php
-namespace exussum12\TripAdvisor;
 
+namespace exussum12\TripAdvisor;
 
 interface Client
 {

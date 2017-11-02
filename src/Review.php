@@ -29,7 +29,6 @@ class Review
         $this->changeAllToString($review);
         $this->review = $review;
         $this->applyCorrectTypes();
-
     }
 
     public function __get($name)
@@ -53,19 +52,17 @@ class Review
         }
 
         if (isset($this->review->isDeleted)) {
-            $this->review->isDelted = (bool)$this->isDeleted;
+            $this->review->isDelted = (bool) $this->isDeleted;
         }
         if (isset($this->review->rating)) {
-            $this->review->rating = (double)$this->rating;
+            $this->review->rating = (double) $this->rating;
         }
     }
 
     protected function changeAllToString($review)
     {
         foreach ($review as &$part) {
-            $part = (string)$part;
+            $part = (string) $part;
         }
     }
-
 }
-

@@ -13,5 +13,4 @@ class ReviewTest extends TestCase
         $review = new Review([]);
         $review->test = "1234";
     }
-
 }
