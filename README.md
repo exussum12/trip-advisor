@@ -4,7 +4,7 @@ This is designed to be an easy way in php to use the reviews API from trip advis
 
 This can be installed using composer for example
 
-    composer require exussum12\TripAdvisor
+    composer require exussum12\trip-advisor
     
  Then the most simple method of getting the reviews is as follows
  
