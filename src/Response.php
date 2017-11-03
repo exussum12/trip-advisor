@@ -1,7 +1,8 @@
 <?php
 namespace exussum12\TripAdvisor;
 
-use exussum12\TripAdvisor\Exceptions\IpDisallowed;
+use exussum12\TripAdvisor\Exceptions\InvalidCredentials;
+use exussum12\TripAdvisor\Exceptions\UnknownError;
 
 class Response
 {
