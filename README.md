@@ -21,6 +21,9 @@ only requesting new data when it it is required.
 You can set the page size by doing `$reviews->limit(50);` This will request smaller chucks.
 If you only want a certain size of data use `$reviews->get()->getArray()` which will only send one request.
 
+If you are trying to update existing data, use a date range, eg  `$reviews->since(new DateTime('2017-01-01'))`
+
+This will only return the newer reviews.
 # Options
 All options can be chained, together for example
 
