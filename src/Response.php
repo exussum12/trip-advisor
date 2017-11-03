@@ -8,6 +8,7 @@ class Response
     private $body;
     private $headers;
     private $httpCode;
+    private $bodyJsonStatus;
 
     const FORBIDDEN = 403;
 
@@ -15,7 +16,8 @@ class Response
     {
         $this->httpCode = $httpCode;
         $this->headers = $headers;
-        $this->body = $body;
+        $this->body = json_decode($body);
+        $this->bodyJsonStatus = json_last_error();
         $this->handleResponse();
     }
 
@@ -36,18 +38,22 @@ class Response
 
     protected function handleResponse()
     {
+        $this->checkValidJson();
         $this->checkForbidden();
     }
 
     protected function checkForbidden()
     {
         if ($this->httpCode == self::FORBIDDEN) {
-            $body = json_decode($this->getBody());
 
-            if (json_last_error() == JSON_ERROR_NONE) {
-                throw new UnknownError($body);
-            }
-            throw new IpDisallowed();
+            throw new InvalidCredentials();
+        }
+    }
+
+    protected function checkValidJson()
+    {
+        if ($this->bodyJsonStatus !== JSON_ERROR_NONE) {
+            throw new UnknownError($this->getBody());
         }
     }
 }

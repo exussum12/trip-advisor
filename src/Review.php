@@ -12,6 +12,7 @@ use DateTimeInterface;
  * @property DateTimeInterface reviewDate
  * @property DateTimeInterface|null visitDate
  * @property string title
+ * @property string text
  * @property string reviewLanguage
  * @property string managementResponse
  * @property string responseLanguage

@@ -130,9 +130,9 @@ class Reviews
         return $this->urlArgs;
     }
 
-    private function makeReviews($response)
+    private function makeReviews(Response $response)
     {
-        $reviews = json_decode($response);
+        $reviews = $response->getBody();
         $out = [];
         if (isset($reviews->reviews)) {
             foreach ($reviews->reviews as $review) {

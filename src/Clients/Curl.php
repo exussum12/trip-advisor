@@ -2,6 +2,7 @@
 namespace exussum12\TripAdvisor\Clients;
 
 use exussum12\TripAdvisor\Client;
+use exussum12\TripAdvisor\Response;
 
 class Curl implements Client
 {
@@ -35,10 +36,17 @@ class Curl implements Client
             $this->curlHandle,
             CURLOPT_HEADERFUNCTION,
             function ($curl, $header) use ($headers) {
-                list($key, $value) = explode($header, ':', 2);
+                if (strpos($header, ':') !== false) {
+                    list($key, $value) = explode(':', $header, 2);
+                    $headers[$key] = $value;
+                }
+                return strlen($header);
             }
         );
 
-        return curl_exec($this->curlHandle);
+        $body = curl_exec($this->curlHandle);
+        $statusCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+
+        return new Response($statusCode, $headers, $body);
     }
 }
