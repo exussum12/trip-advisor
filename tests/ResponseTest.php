@@ -1,6 +1,7 @@
 <?php
 
 use exussum12\TripAdvisor\Exceptions\InvalidCredentials;
+use exussum12\TripAdvisor\Exceptions\RateLimit;
 use exussum12\TripAdvisor\Exceptions\UnknownError;
 use exussum12\TripAdvisor\Response;
 use PHPUnit\Framework\TestCase;
@@ -26,5 +27,11 @@ class ResponseTest extends TestCase
     {
         $this->expectException(UnknownError::class);
         new Response(403, [], 'InvalidJson');
+    }
+
+    public function testRateLimit()
+    {
+        $this->expectException(RateLimit::class);
+        new Response(419, [], '');
     }
 }

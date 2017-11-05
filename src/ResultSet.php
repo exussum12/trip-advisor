@@ -3,13 +3,17 @@
 namespace exussum12\TripAdvisor;
 
 use Countable;
+use exussum12\TripAdvisor\Exceptions\BaseException;
+use exussum12\TripAdvisor\Exceptions\RateLimit;
 use Iterator;
 
 class ResultSet implements Iterator, Countable
 {
-    protected $current = 0;
-    protected $reviews;
     protected $array;
+    protected $current = 0;
+    protected $rateLimitRetryAttempts = 5;
+    protected $rateLimitTimeout = 10;
+    protected $reviews;
 
     public function __construct(Reviews $reviews, array $startingArray)
     {
@@ -44,10 +48,7 @@ class ResultSet implements Iterator, Countable
             $this->reviews->offset(
                 $settings['limit'] + $settings['offset']
             );
-
-            $extraResults = $this->reviews->get();
-            $this->array = array_merge($this->array, $extraResults->getArray());
-
+            $this->getMoreResults();
             return isset($this->array[$this->current]);
         }
 
@@ -67,5 +68,22 @@ class ResultSet implements Iterator, Countable
     public function count()
     {
         return count($this->array);
+    }
+
+    protected function getMoreResults()
+    {
+        $i = 0;
+        while ($i++ < $this->rateLimitRetryAttempts) {
+            try {
+                $extraResults = $this->reviews->get();
+                $this->array = array_merge($this->array, $extraResults->getArray());
+                break;
+            } catch (RateLimit $exception) {
+                sleep($this->rateLimitTimeout);
+                continue;
+            } catch (BaseException $exception) {
+                throw $exception;
+            }
+        }
     }
 }

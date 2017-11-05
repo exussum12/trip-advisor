@@ -2,6 +2,7 @@
 namespace exussum12\TripAdvisor;
 
 use exussum12\TripAdvisor\Exceptions\InvalidCredentials;
+use exussum12\TripAdvisor\Exceptions\RateLimit;
 use exussum12\TripAdvisor\Exceptions\UnknownError;
 
 class Response
@@ -12,6 +13,7 @@ class Response
     private $bodyJsonStatus;
 
     const FORBIDDEN = 403;
+    const RATE_LIMIT = 419;
 
     public function __construct($httpCode, $headers, $body)
     {
@@ -39,6 +41,7 @@ class Response
 
     protected function handleResponse()
     {
+        $this->checkRateLimit();
         $this->checkValidJson();
         $this->checkForbidden();
     }
@@ -55,6 +58,13 @@ class Response
     {
         if ($this->bodyJsonStatus !== JSON_ERROR_NONE) {
             throw new UnknownError($this->getBody());
+        }
+    }
+
+    private function checkRateLimit()
+    {
+        if ($this->httpCode == self::RATE_LIMIT) {
+            throw new RateLimit();
         }
     }
 }
