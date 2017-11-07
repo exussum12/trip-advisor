@@ -65,8 +65,8 @@ class ResultSetTest extends TestCase
         $extraResults = new ResultSet($review, [3]);
         $lastResult = new ResultSet($review, []);
 
-        $review->method('getSettings')->willReturn(['offset' => 1, 'limit' => 2]);
-        $review->method('offset')->with(3);
+        $review->method('getSettings')->willReturn(['offset' => 3, 'limit' => 2]);
+        $review->method('offset')->with(5);
         $review->method('get')->will($this->onConsecutiveCalls($extraResults, $lastResult));
 
         $count = 0;

@@ -35,11 +35,12 @@ class Curl implements Client
         curl_setopt(
             $this->curlHandle,
             CURLOPT_HEADERFUNCTION,
-            function ($curl, $header) use ($headers) {
+            function ($curl, $header) use (&$headers) {
                 if (strpos($header, ':') !== false) {
                     list($key, $value) = explode(':', $header, 2);
-                    $headers[$key] = $value;
+                    $headers[$key] = trim($value);
                 }
+
                 return strlen($header);
             }
         );

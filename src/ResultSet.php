@@ -44,10 +44,11 @@ class ResultSet implements Iterator, Countable
 
         $settings = $this->reviews->getSettings();
         $offset = $settings['offset'] ?: $settings['limit'];
-        if ($this->current % $offset == $this->current % $settings['limit'] && $this->current > 0) {
+        if ($this->current % $settings['limit'] == 0 && $this->current > 0) {
             $this->reviews->offset(
                 $settings['limit'] + $settings['offset']
             );
+
             $this->getMoreResults();
             return isset($this->array[$this->current]);
         }
@@ -79,7 +80,7 @@ class ResultSet implements Iterator, Countable
                 $this->array = array_merge($this->array, $extraResults->getArray());
                 break;
             } catch (RateLimit $exception) {
-                sleep($this->rateLimitTimeout);
+                sleep($exception->getTimeout());
                 continue;
             } catch (BaseException $exception) {
                 throw $exception;

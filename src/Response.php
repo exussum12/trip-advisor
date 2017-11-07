@@ -13,7 +13,7 @@ class Response
     private $bodyJsonStatus;
 
     const FORBIDDEN = 403;
-    const RATE_LIMIT = 419;
+    const RATE_LIMIT = 429;
 
     public function __construct($httpCode, $headers, $body)
     {
@@ -64,7 +64,14 @@ class Response
     private function checkRateLimit()
     {
         if ($this->httpCode == self::RATE_LIMIT) {
-            throw new RateLimit();
+            $timeout = 60;
+            if (isset($this->getHeaders()['Retry-After'])) {
+                $timeout = $this->getHeaders()['Retry-After'];
+            }
+            $rateLimit = new RateLimit();
+            $rateLimit->setTimeout($timeout);
+
+            throw $rateLimit;
         }
     }
 }

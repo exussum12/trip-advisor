@@ -32,6 +32,6 @@ class ResponseTest extends TestCase
     public function testRateLimit()
     {
         $this->expectException(RateLimit::class);
-        new Response(419, [], '');
+        new Response(429, ['Retry-After' => 30], '');
     }
 }
