@@ -43,7 +43,6 @@ class ResultSet implements Iterator, Countable
         }
 
         $settings = $this->reviews->getSettings();
-        $offset = $settings['offset'] ?: $settings['limit'];
         if ($this->current % $settings['limit'] == 0 && $this->current > 0) {
             $this->reviews->offset(
                 $settings['limit'] + $settings['offset']
