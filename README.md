@@ -1,4 +1,8 @@
 # Trip Advisor Review Client
+[![Build Status](https://travis-ci.org/exussum12/trip-advisor.svg?branch=master)](https://travis-ci.org/exussum12/trip-advisor)
+[![Coverage Status](https://coveralls.io/repos/github/exussum12/trip-advisor/badge.svg?branch=master)](https://coveralls.io/github/exussum12/trip-advisor?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/exussum12/trip-advisor/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/exussum12/trip-advisor/?branch=master)
+
 
 This is designed to be an easy way in php to use the reviews API from trip advisor.
 
