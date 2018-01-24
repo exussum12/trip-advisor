@@ -1,8 +1,7 @@
 #!/bin/sh
 set -e
 
-[ -z "$UPDATE_COVERAGE" ] || composer require satooshi/php-coveralls:dev-master
-
+[ -z "$UPDATE_COVERAGE" ] || composer require satooshi/php-coveralls:v1.1.0
 composer install --dev
 
 ./vendor/bin/phpunit
