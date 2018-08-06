@@ -4,7 +4,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/exussum12/trip-advisor/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/exussum12/trip-advisor/?branch=master)
 
 
-This is designed to be an easy way in php to use the reviews API from trip advisor.
+This is designed to be an easy way in php to use the reviews API from TripAdvisor.
 
 This can be installed using composer for example
 
@@ -14,13 +14,13 @@ This can be installed using composer for example
  
 ```php
 $reviews = new exussum12\TripAdvisor\Reviews('your key', 'your secret');
-forech ($reviews->get() as $review) {
+foreach ($reviews->get() as $review) {
     //handle review
 }
 ```
 
-You The API is paged at a maximum of 1000 reviews per page, This is all handled transparently and will page internally
-only requesting new data when it it is required.
+The API is paged at a maximum of 1000 reviews per page, This is all handled transparently and will page internally
+only requesting new data when it is required.
 
 You can set the page size by doing `$reviews->limit(50);` This will request smaller chucks.
 If you only want a certain size of data use `$reviews->get()->getArray()` which will only send one request.
