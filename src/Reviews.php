@@ -88,7 +88,7 @@ class Reviews
         return $this;
     }
 
-    public function get($time = null)
+    public function get($time = '')
     {
         $url = parse_url(static::URL);
         $args = http_build_query($this->urlArgs);

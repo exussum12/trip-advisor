@@ -15,7 +15,7 @@ class ReviewsTest extends TestCase
     /** @var  Reviews */
     protected $reviews;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->client = $this->getMockBuilder(Client::class)->getMock();

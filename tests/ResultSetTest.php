@@ -9,18 +9,14 @@ use exussum12\TripAdvisor\Reviews;
 
 class ResultSetTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
 
     public function testInitialLoad()
     {
         $review = $this->createMock(Reviews::class);
 
-        $resultSet = new ResultSetTest($review, []);
+        $resultSet = new ResultSet($review, []);
 
-        $this->assertInstanceOf(ResultSetTest::class, $resultSet);
+        $this->assertInstanceOf(ResultSet::class, $resultSet);
     }
 
     public function testCountable()

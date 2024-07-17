@@ -21,22 +21,22 @@ class ResultSet implements Iterator, Countable
         $this->reviews = $reviews;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->array[$this->current];
     }
 
-    public function next()
+    public function next(): void
     {
         $this->current++;
     }
 
-    public function key()
+    public function key(): mixed
     {
         return $this->current;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         if (isset($this->array[$this->current])) {
             return true;
@@ -55,17 +55,17 @@ class ResultSet implements Iterator, Countable
         return false;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->current = 0;
     }
 
-    public function getArray()
+    public function getArray(): array
     {
         return $this->array;
     }
 
-    public function count()
+    public function count():int
     {
         return count($this->array);
     }
